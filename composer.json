@@ -1,0 +1,8 @@
+{
+    "name": "jarzon/primdeploy",
+    "type": "project",
+    "require": {
+    },
+    "require-dev": {
+}
+}

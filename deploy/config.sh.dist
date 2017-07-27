@@ -1,0 +1,18 @@
+#!/bin/bash
+name="PROJECT"
+website="masterj.net"
+ssh_server="masterj.net"
+ssh_user="root"
+db_password=""
+root_dir="/var/www"
+
+formatEcho () {
+	if [ -z "$1" ]
+	then
+		echo "";
+	else
+		printf "\n-----------------------------------------------------------------\n|                                                               |\n|  %-60s |\n|                                                               |\n-----------------------------------------------------------------\n" "$1";
+	fi
+
+   return 0
+}
