@@ -5,7 +5,7 @@ formatEcho "Create server's base folders"
 ssh $ssh_user@$ssh_server "cd $root_dir && mkdir $name && cd $name && mkdir htdocs && mkdir logs && mkdir dumps"
 
 formatEcho "First deploy"
-sh ../primtools/deploy.sh
+sh ../primdeploy/deploy.sh
 
 formatEcho "Copy/Paste the project config"
 rsync --compress --times ./app/config/config.php $ssh_user@$ssh_server:$root_dir/$name/htdocs/app/config/config.php
@@ -14,4 +14,4 @@ formatEcho "Edit the config"
 ssh -t $ssh_user@$ssh_server "nano $root_dir/$name/htdocs/app/config/config.php"
 
 formatEcho "Init the project"
-ssh $sshu_ser@$ssh_server "cd $root_dir/$name && bash -s" < ../primtools/bashScripts/init.sh
+ssh $sshu_ser@$ssh_server "cd $root_dir/$name && bash -s" < ../primdeploy/bashScripts/init.sh
