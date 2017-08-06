@@ -5,7 +5,7 @@ cd ./htdocs
 formatEcho "Install dependencies."
 
 
-composer --no-dev install -a --no-interaction
+composer --no-dev install -o --no-interaction
 
 formatEcho "Update Apache config"
 cp ./app/deploy/vhost.conf /etc/apache2/sites-available/$name.conf
