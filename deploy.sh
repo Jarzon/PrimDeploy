@@ -1,6 +1,8 @@
 #!/bin/bash
 source ./app/deploy/config.sh
 
+#TODO: Create a function that connect to the ssh and exec a local file on the server
+
 if [ ! -d "./app/deploy" ]; then
     formatEcho "!!!Warning!!!"
     formatEcho "deploy config folder not found"
@@ -33,5 +35,3 @@ ssh $ssh_user@$ssh_server "cd $root_dir/$name && bash -s" < ../primdeploy/bashSc
 
 formatEcho "Update the project."
 ssh $ssh_user@$ssh_server "cd $root_dir/$name && bash -s" < ../primdeploy/bashScripts/update.sh
-
-#TODO: Create a function that connect to the ssh and exec a local file on the server
