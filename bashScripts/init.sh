@@ -16,7 +16,3 @@ formatEcho "Enable project's vhost"
 a2ensite $name
 
 service apache2 reload
-
-formatEcho "Create LetsEncrypt Cert"
-
-letsencrypt --apache -n -d $website  -d www.$website
