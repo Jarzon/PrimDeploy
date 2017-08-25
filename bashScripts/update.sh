@@ -4,7 +4,6 @@ cd ./htdocs
 
 formatEcho "Install dependencies."
 
-
 composer --no-dev install -o --no-interaction
 
 formatEcho "Update Apache config"

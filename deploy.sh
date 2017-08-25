@@ -28,7 +28,7 @@ formatEcho "Checkout project back to latest branch: $currentBranch"
 git checkout $currentBranch
 
 formatEcho "Unstashing latest shash"
-git stash apply
+git stash pop
 
 formatEcho "Create a backup of the database before the migration."
 ssh $ssh_user@$ssh_server "cd $root_dir/$name && bash -s" < ../primdeploy/bashScripts/backup.sh
