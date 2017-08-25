@@ -67,4 +67,14 @@ postmap hash:/etc/postfix/sasl_passwd
 
 a2enmod rewrite && a2enmod expires && a2enmod ssl && a2enconf custom && service apache2 restart
 
+echo "Generate ssl cert"
+
+service apache2 stop
+letsencrypt certonly --standalone -d masterj.net -d www.masterj.net
+service apache2 start
+
+echo "Add github auth token for satis"
+
+composer config --global github-oauth.github.com ***REMOVED***
+
 reboot
