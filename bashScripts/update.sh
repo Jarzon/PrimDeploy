@@ -20,6 +20,9 @@ cp ./app/deploy/vhost.conf /etc/apache2/sites-available/$name.conf
 cp ./app/deploy/vhost-ssl.conf /etc/apache2/sites-available/$name-ssl.conf
 service apache2 reload
 
+formatEcho "Reset cache"
+rm -r ./app/cache/*
+
 formatEcho "Update files permisions."
 
 cd ../
