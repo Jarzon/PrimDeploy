@@ -28,6 +28,8 @@ git checkout $latestTag
 
 #target = $(date -d @$time +'%Y%m%d%H%M%S')
 
+#ssh $ssh_user@$ssh_server "cd $root_dir/$name && phinx rollback -d $target"
+
 #TODO: use $target for phinx if you rollback and do it before you push the files on the server
 
 formatEcho "Sending files to the prod server: $ssh_server"
