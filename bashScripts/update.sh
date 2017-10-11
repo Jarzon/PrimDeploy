@@ -22,6 +22,10 @@ chmod -R 750 ./htdocs/*
 chown -R www-data:www-data ./htdocs
 # TODO: Add perms for upload folder here | Create a upload folder for every project?
 
+formatEcho "Migrate Database"
+
+./bin/phinx migrate
+
 formatEcho "Update Apache config"
 cp ./app/deploy/vhost.conf /etc/apache2/sites-available/$name.conf
 cp ./app/deploy/vhost-ssl.conf /etc/apache2/sites-available/$name-ssl.conf
