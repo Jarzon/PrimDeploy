@@ -10,6 +10,8 @@ if [ ! -d "./app/deploy" ]; then
 fi
 
 # TODO: get the first command param to deploy to that version instead of the latest
+# TODO: Be able to rollback to past version
+# TODO: Add a flag to the command to create a phinx breakpoint
 
 currentBranch=$(git rev-parse --abbrev-ref HEAD)
 
@@ -20,6 +22,13 @@ latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
 
 formatEcho "Checkout project to latest version: $latestTag"
 git checkout $latestTag
+
+# Get the latest commit date
+#time=$(git show -s --format=%ct HEAD)
+
+#target = $(date -d @$time +'%Y%m%d%H%M%S')
+
+#TODO: use $target for phinx if you rollback and do it before you push the files on the server
 
 formatEcho "Sending files to the prod server: $ssh_server"
 rsync --delete --compress --times --recursive --verbose --copy-links --exclude-from './app/deploy/exclude.txt' ./* $ssh_user@$ssh_server:$root_dir/$name/htdocs/
