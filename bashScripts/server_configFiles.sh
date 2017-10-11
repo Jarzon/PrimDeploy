@@ -5,8 +5,10 @@ EOF
 
 cat << EOF > /etc/php/7.0/apache2/conf.d/custom.ini
 date.timezone = America/New_York
-extension=pdo_mysql.so
 sendmail_path = "sendmail -t -i"
+session.gc_maxlifetime = 15552000
+session.cookie_lifetime = 15552000
+realpath_cache_size = 4096k
 EOF
 
 cat << EOF > /usr/share/logwatch/default.conf/custom.conf
