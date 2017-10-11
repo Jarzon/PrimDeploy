@@ -1,1 +1,4 @@
-ssh-copy-id root@masterj.net && ssh root@masterj.net "bash -s" < ./bashScripts/server_installer.sh && ssh root@masterj.net "bash -s" < ./bashScripts/server_configFiles.sh
+#!/bin/bash
+source ./app/deploy/config.sh
+
+ssh-copy-id $ssh_user@$ssh_server && ssh $ssh_user@$ssh_server "bash -s" < ./bashScripts/server_installer.sh && ssh $ssh_user@$ssh_server "bash -s" < ./bashScripts/server_configFiles.sh
