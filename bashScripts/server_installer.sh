@@ -27,7 +27,7 @@ service apache2 stop
 
 echo "Generate ssl cert"
 
-letsencrypt certonly --standalone -d masterj.net -d www.masterj.net
+letsencrypt certonly --standalone -d masterj.net -d www.masterj.net -d packages.masterj.net
 service apache2 start
 
 echo "Add github auth token for satis"
