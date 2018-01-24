@@ -34,4 +34,9 @@ echo "Add github auth token for satis"
 
 composer config --global github-oauth.github.com ***REMOVED***
 
+
+echo "Add cron jobs"
+
+(crontab -l ; echo "15 4 * * * /usr/bin/mysqldump -u root -p***REMOVED*** Facture | gzip > /var/www/invoice/dumps/dump.sql.gz") | sort - | uniq - | crontab -
+
 reboot
