@@ -35,4 +35,4 @@ chown -R www-data:www-data ./htdocs
 # TODO: Add perms for upload folder here | Create a upload folder for every project?
 
 formatEcho "Looking to renew SSL Cert"
-letsencrypt renew
+letsencrypt renew --apache
