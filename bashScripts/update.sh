@@ -34,5 +34,9 @@ chmod -R 750 ./htdocs/*
 chown -R www-data:www-data ./htdocs
 # TODO: Add perms for upload folder here | Create a upload folder for every project?
 
+formatEcho "Update cron jobs"
+
+cp ./app/deploy/cron /etc/cron.d/$name
+
 formatEcho "Looking to renew SSL Cert"
 letsencrypt renew --apache
