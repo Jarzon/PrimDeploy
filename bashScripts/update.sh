@@ -2,26 +2,43 @@
 cd ./htdocs
 . ./app/deploy/config.sh
 
-formatEcho "Install dependencies."
+if [ -f "./composer.json" ]; then
+    formatEcho "Install dependencies."
 
-composer --no-dev install -o --no-interaction
+    composer --no-dev install -o --no-interaction
+fi
 
-formatEcho "Update Apache config"
-cp ./app/deploy/vhost.conf /etc/apache2/sites-available/$name.conf
-cp ./app/deploy/vhost-ssl.conf /etc/apache2/sites-available/$name-ssl.conf
-service apache2 reload
+if [ -f "./phinx.yml" ]; then
+    formatEcho "Migrate Database"
 
-formatEcho "Migrate Database"
+    ./bin/phinx migrate
+fi
 
-./bin/phinx migrate
+if [ -f "./app/deploy/vhost.conf" ] || [ -f "./app/deploy/vhost-ssl.conf" ] ; then
+    formatEcho "Update Apache config"
 
-formatEcho "Update Apache config"
-cp ./app/deploy/vhost.conf /etc/apache2/sites-available/$name.conf
-cp ./app/deploy/vhost-ssl.conf /etc/apache2/sites-available/$name-ssl.conf
-service apache2 reload
+    if [ -f "./app/deploy/vhost.conf" ]; then
+        cp ./app/deploy/vhost.conf /etc/apache2/sites-available/$name.conf
+    fi
 
-formatEcho "Reset cache"
-rm -r ./app/cache/*
+    if [ -f "./app/deploy/vhost.conf" ]; then
+        cp ./app/deploy/vhost-ssl.conf /etc/apache2/sites-available/$name-ssl.conf
+    fi
+
+    service apache2 reload
+fi
+
+if [ -d "./app/cache/" ]; then
+    formatEcho "Reset cache"
+
+    rm -r ./app/cache/*
+fi
+
+if [ -f "./app/deploy/cron" ]; then
+    formatEcho "Update cron jobs"
+
+    cp ./app/deploy/cron /etc/cron.d/$name
+fi
 
 formatEcho "Update files permisions."
 
@@ -33,10 +50,6 @@ cd ../
 chmod -R 750 ./htdocs/*
 chown -R www-data:www-data ./htdocs
 # TODO: Add perms for upload folder here | Create a upload folder for every project?
-
-formatEcho "Update cron jobs"
-
-cp ./app/deploy/cron /etc/cron.d/$name
 
 formatEcho "Looking to renew SSL Cert"
 letsencrypt renew --apache
