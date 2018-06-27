@@ -1,1 +1,1 @@
-*/5 * * * * /var/www/PROJECT/htdocs/cron.php
+# */5 * * * * root php /var/www/PROJECT/htdocs/cron.php
