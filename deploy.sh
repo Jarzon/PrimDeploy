@@ -1,13 +1,14 @@
 #!/bin/bash
-source ./app/deploy/config.sh
 
 #TODO: Create a function that connect to the ssh and exec a local file on the server
 
 if [ ! -d "./app/deploy" ]; then
-    formatEcho "!!!Warning!!!"
-    formatEcho "deploy config folder not found"
+    printf "!!! Warning !!!\n\n"
+    printf "app/deploy/ config folder not found"
     exit 1
 fi
+
+source ./app/deploy/config.sh
 
 # TODO: get the first command param to deploy to that version instead of the latest
 # TODO: Be able to rollback to past version
