@@ -1,7 +1,7 @@
 #!/bin/bash
 name="PROJECT"
-website="masterj.net"
-ssh_server="masterj.net"
+website="exemple.com"
+ssh_server="exemple.com"
 ssh_user="root"
 db_password=""
 root_dir="/var/www"

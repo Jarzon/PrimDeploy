@@ -21,7 +21,7 @@ if [ -f "./app/deploy/vhost.conf" ] || [ -f "./app/deploy/vhost-ssl.conf" ] ; th
         cp ./app/deploy/vhost.conf /etc/apache2/sites-available/$name.conf
     fi
 
-    if [ -f "./app/deploy/vhost.conf" ]; then
+    if [ -f "./app/deploy/vhost-ssl.conf" ]; then
         cp ./app/deploy/vhost-ssl.conf /etc/apache2/sites-available/$name-ssl.conf
     fi
 
