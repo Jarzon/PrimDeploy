@@ -10,9 +10,14 @@ fi
 
 source ./app/deploy/config.sh
 
+if [ $ssh_user = "root" ]; then
+    formatEcho "Connecting to SSH with root!"
+fi
+
 # TODO: get the first command param to deploy to that version instead of the latest
-# TODO: Be able to rollback to past version
+# TODO: Be able to rollback to past version (phinx migrations)
 # TODO: Add a flag to the command to create a phinx breakpoint
+# TODO: Add a a command to know what version is deployed on the prod
 
 currentBranch=$(git rev-parse --abbrev-ref HEAD)
 
@@ -32,9 +37,11 @@ git checkout $latestTag
 #ssh $ssh_user@$ssh_server "cd $root_dir/$name && phinx rollback -d $target"
 
 #TODO: use $target for phinx if you rollback and do it before you push the files on the server
+formatEcho "Auth on server: $ssh_server"
+ssh -t $ssh_user@$ssh_server 'echo "Defaults !tty_tickets" | sudo tee /etc/sudoers.d/temp; sudo -v'
 
 formatEcho "Sending files to the prod server: $ssh_server"
-rsync --delete --compress --times --recursive --verbose --copy-links --exclude-from './app/deploy/exclude.txt' ./* $ssh_user@$ssh_server:$root_dir/$name/htdocs/
+rsync --delete --compress --times --recursive --verbose --copy-links --exclude-from './app/deploy/exclude.txt' -e 'ssh' '--rsync-path=sudo rsync' ./* $ssh_user@$ssh_server:$root_dir/$name/htdocs/
 
 formatEcho "Checkout project back to latest branch: $currentBranch"
 git checkout $currentBranch
@@ -43,7 +50,7 @@ formatEcho "Unstashing latest shash"
 git stash pop
 
 formatEcho "Create a backup of the database before the migration."
-ssh $ssh_user@$ssh_server "cd $root_dir/$name && bash -s" < ../PrimDeploy/bashScripts/backup.sh
+ssh $ssh_user@$ssh_server "cd $root_dir/$name && sudo bash -s" < ../PrimDeploy/bashScripts/backup.sh
 
 formatEcho "Update the project."
-ssh $ssh_user@$ssh_server "cd $root_dir/$name && bash -s" < ../PrimDeploy/bashScripts/update.sh
+ssh $ssh_user@$ssh_server "cd $root_dir/$name && sudo bash -s" < ../PrimDeploy/bashScripts/update.sh

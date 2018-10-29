@@ -2,7 +2,7 @@
 source ./app/deploy/config.sh
 
 formatEcho "Create server's base folders"
-ssh $ssh_user@$ssh_server "cd $root_dir && mkdir $name && cd $name && mkdir htdocs && mkdir logs && mkdir dumps"
+ssh $ssh_user@$ssh_server "cd $root_dir && sudo mkdir $name && cd $name && mkdir htdocs && mkdir logs && mkdir dumps && chown -R www-data:www-data $rootdir/$name/"
 
 formatEcho "First deploy"
 sh ../PrimDeploy/deploy.sh
