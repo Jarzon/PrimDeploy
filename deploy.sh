@@ -37,8 +37,13 @@ git checkout $latestTag
 #ssh $ssh_user@$ssh_server "cd $root_dir/$name && phinx rollback -d $target"
 
 #TODO: use $target for phinx if you rollback and do it before you push the files on the server
+if [ -f "/etc/sudoers.d/temp" ]; then
+    formatEcho "Missing !tty_tickets, adding suoders config file"
+    ssh -t $ssh_user@$ssh_server 'echo "Defaults !tty_tickets" | sudo tee /etc/sudoers.d/temp;'
+fi
+
 formatEcho "Auth on server: $ssh_server"
-ssh -t $ssh_user@$ssh_server 'echo "Defaults !tty_tickets" | sudo tee /etc/sudoers.d/temp; sudo -v'
+ssh -t $ssh_user@$ssh_server 'sudo -v'
 
 formatEcho "Sending files to the prod server: $ssh_server"
 rsync --compress --times --recursive --verbose --delete --perms --copy-links --exclude-from './app/deploy/exclude.txt' -e 'ssh' '--rsync-path=sudo rsync' ./* $ssh_user@$ssh_server:$root_dir/$name/htdocs/
