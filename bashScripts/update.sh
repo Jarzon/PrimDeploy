@@ -44,12 +44,9 @@ formatEcho "Update files permisions."
 
 cd ../
 
-#TODO: Use correct permissions
 #TODO: Use a different user for every project
 # Have to apply it every deploy because we upload as root
-chmod -R 750 ./htdocs/*
 chown -R www-data:www-data ./htdocs
-# TODO: Add perms for upload folder here | Create a upload folder for every project?
 
 formatEcho "Looking to renew SSL Cert"
 letsencrypt renew --apache
