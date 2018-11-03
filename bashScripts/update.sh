@@ -45,8 +45,6 @@ formatEcho "Update files permisions."
 cd ../
 
 #TODO: Use a different user for every project
-# Have to apply it every deploy because we upload as root
-chown -R www-data:www-data ./htdocs
 
 formatEcho "Looking to renew SSL Cert"
 letsencrypt renew --apache

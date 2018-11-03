@@ -46,7 +46,7 @@ formatEcho "Auth on server: $ssh_server"
 ssh -t $ssh_user@$ssh_server 'sudo -v'
 
 formatEcho "Sending files to the prod server: $ssh_server"
-rsync --compress --times --recursive --verbose --delete --perms --copy-links --exclude-from './app/deploy/exclude.txt' -e 'ssh' '--rsync-path=sudo rsync' ./* $ssh_user@$ssh_server:$root_dir/$name/htdocs/
+rsync --compress --times --recursive --verbose --delete --perms --owner --group --copy-links --exclude-from './app/deploy/exclude.txt' -e 'ssh' '--rsync-path=sudo rsync' ./* $ssh_user@$ssh_server:$root_dir/$name/htdocs/
 
 formatEcho "Checkout project back to latest branch: $currentBranch"
 git checkout $currentBranch
