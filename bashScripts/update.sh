@@ -38,6 +38,7 @@ if [ -f "./app/deploy/cron" ]; then
     formatEcho "Update cron jobs"
 
     cp ./app/deploy/cron /etc/cron.d/$name
+    sudo service cron restart
 fi
 
 formatEcho "Update files permisions."
