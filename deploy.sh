@@ -2,7 +2,7 @@
 
 #TODO: Create a function that connect to the ssh and exec a local file on the server
 
-if [ ! -d "./app/deploy" ]; then
+if [[ ! -d "./app/deploy" ]]; then
     printf "!!! Warning !!!\n\n"
     printf "app/deploy/ config folder not found"
     exit 1
@@ -21,8 +21,14 @@ fi
 
 currentBranch=$(git rev-parse --abbrev-ref HEAD)
 
-formatEcho "Stashing local changes"
-git stash
+latestStash=0
+
+if [[ $(git stash) = "No local changes to save" ]]; then
+    formatEcho "Nothing to stash"
+else
+    formatEcho "Stashing local changes"
+    latestStash=1
+fi
 
 latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
 
@@ -34,13 +40,8 @@ git checkout $latestTag
 
 #target = $(date -d @$time +'%Y%m%d%H%M%S')
 
-#ssh $ssh_user@$ssh_server "cd $root_dir/$name && phinx rollback -d $target"
-
 #TODO: use $target for phinx if you rollback and do it before you push the files on the server
-if [ -f "/etc/sudoers.d/temp" ]; then
-    formatEcho "Missing !tty_tickets, adding suoders config file"
-    ssh -t $ssh_user@$ssh_server 'echo "Defaults !tty_tickets" | sudo tee /etc/sudoers.d/temp;'
-fi
+#ssh $ssh_user@$ssh_server "cd $root_dir/$name && phinx rollback -d $target"
 
 formatEcho "Auth on server: $ssh_server"
 ssh -t $ssh_user@$ssh_server 'sudo -v'
@@ -51,8 +52,10 @@ rsync --compress --times --recursive --verbose --delete --perms --owner --group 
 formatEcho "Checkout project back to latest branch: $currentBranch"
 git checkout $currentBranch
 
-formatEcho "Unstashing latest shash"
-git stash pop
+if [[ $latestStash = 1 ]]; then
+    formatEcho "Unstashing latest shash"
+    git stash pop
+fi
 
 formatEcho "Create a backup of the database before the migration."
 ssh $ssh_user@$ssh_server "cd $root_dir/$name && sudo bash -s" < ../PrimDeploy/bashScripts/backup.sh
