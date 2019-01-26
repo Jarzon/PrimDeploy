@@ -16,7 +16,6 @@ fi
 
 # TODO: get the first command param to deploy to that version instead of the latest
 # TODO: Be able to rollback to past version (phinx migrations)
-# TODO: Add a flag to the command to create a phinx breakpoint
 # TODO: Add a a command to know what version is deployed on the prod
 
 currentBranch=$(git rev-parse --abbrev-ref HEAD)
@@ -44,12 +43,8 @@ git checkout $latestTag
 #ssh $ssh_user@$ssh_server "cd $root_dir/$name && phinx rollback -d $target"
 
 formatEcho "Auth on server: $ssh_server"
-if [ -z "$PRIMDEPLOYSUDOPASSWORD" ]
-then
-      ssh -t $ssh_user@$ssh_server 'sudo -v'
-else
-      ssh -t $ssh_user@$ssh_server 'TEMPPW=${1} && sudo -v $TEMPPW' < $PRIMDEPLOYSUDOPASSWORD
-fi
+
+ssh -t $ssh_user@$ssh_server 'sudo -v'
 
 formatEcho "Sending files to the prod server: $ssh_server"
 rsync --compress --times --recursive --verbose --delete --perms --owner --group --copy-links --exclude-from './app/deploy/exclude.txt' -e 'ssh' '--rsync-path=sudo rsync' ./* $ssh_user@$ssh_server:$root_dir/$name/htdocs/
