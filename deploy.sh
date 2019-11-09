@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#TODO: Create a function that connect to the ssh and exec a local file on the server
-
 if [[ ! -d "./app/deploy" ]]; then
     printf "!!! Warning !!!\n\n"
     printf "app/deploy/ config folder not found"
@@ -29,17 +27,19 @@ else
     latestStash=1
 fi
 
-latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
+latestTag=$(git describe --tags --abbrev=0)
 
-formatEcho "Checkout project to latest version: $latestTag"
-git checkout $latestTag
+if [[ $(git describe --tags HEAD) != ${latestTag} ]]; then
+    formatEcho "Checkout project to latest version: $latestTag"
+    git checkout ${latestTag}
+fi
 
+#TODO: use $target for phinx if you rollback and do it before you push the files on the server
 # Get the latest commit date
 #time=$(git show -s --format=%ct HEAD)
 
 #target = $(date -d @$time +'%Y%m%d%H%M%S')
 
-#TODO: use $target for phinx if you rollback and do it before you push the files on the server
 #ssh $ssh_user@$ssh_server "cd $root_dir/$name && phinx rollback -d $target"
 
 formatEcho "Auth on server: $ssh_server"

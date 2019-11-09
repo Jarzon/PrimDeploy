@@ -5,7 +5,7 @@ cd ./htdocs
 if [ -f "./composer.json" ]; then
     formatEcho "Install dependencies."
 
-    composer --no-dev install -o --no-interaction --no-scripts
+    composer --no-dev install -o --no-interaction
 fi
 
 if [ -f "./phinx.yml" ]; then
