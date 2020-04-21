@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ./htdocs
+cd ./$deployfolder
 . ./app/deploy/config.sh
 
 if [ -f "./composer.json" ]; then
@@ -11,7 +11,7 @@ fi
 if [ -f "./phinx.yml" ]; then
     formatEcho "Migrate Database"
 
-    ./bin/phinx migrate
+    ./bin/phinx migrate -e $deployenvironement
 fi
 
 if [ -f "./app/deploy/vhost.conf" ] || [ -f "./app/deploy/vhost-ssl.conf" ] ; then
@@ -40,8 +40,6 @@ if [ -f "./app/deploy/cron" ]; then
     cp ./app/deploy/cron /etc/cron.d/$name
     sudo service cron restart
 fi
-
-formatEcho "Update files permisions."
 
 cd ../
 
