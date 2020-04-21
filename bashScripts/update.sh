@@ -1,11 +1,10 @@
 #!/bin/bash
-cd ./$deployfolder
 . ./app/deploy/config.sh
 
 if [ -f "./composer.json" ]; then
     formatEcho "Install dependencies."
 
-    composer --no-dev install -o --no-interaction
+    composer --no-dev install -o --no-interaction --no-scripts
 fi
 
 if [ -f "./phinx.yml" ]; then
