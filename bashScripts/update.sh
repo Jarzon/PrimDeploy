@@ -1,6 +1,8 @@
 #!/bin/bash
 . ./app/deploy/config.sh
 
+deployenvironement=${1:-prod}
+
 if [ -f "./composer.json" ]; then
     formatEcho "Install dependencies."
 

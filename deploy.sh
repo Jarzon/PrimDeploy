@@ -69,4 +69,4 @@ if [[ $deployenvironement = 'prod' ]]; then
 fi
 
 formatEcho "Update the project."
-ssh $ssh_user@$ssh_server "cd $root_dir/$name/$deployfolder && sudo bash -s" < ../PrimDeploy/bashScripts/update.sh
+ssh $ssh_user@$ssh_server "cd $root_dir/$name/$deployfolder && sudo bash -s" < ../PrimDeploy/bashScripts/update.sh $deployenvironement
