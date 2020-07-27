@@ -50,6 +50,13 @@ Defaults !tty_tickets
 
 EOF
 
+# IP Failover
+sudo cat << EOF > /etc/systemd/network/50-default.network
+[Network]
+Address=${2}/32
+
+EOF
+
 sudo a2enmod rewrite
 sudo a2enmod expires
 sudo a2enmod ssl
@@ -59,3 +66,4 @@ sudo a2enconf custom
 
 sudo service ssh restart
 sudo service apache2 restart
+sudo service systemd-networkd restart
