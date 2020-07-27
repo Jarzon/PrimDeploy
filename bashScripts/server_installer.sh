@@ -1,38 +1,61 @@
 #!/bin/bash
 
-sudo apt-get update && apt-get upgrade && apt-get -q -y install apache2 php mysql-server libapache2-mod-php php-mysql php-curl php-mbstring php-zip composer git fail2ban sendmail logwatch python-letsencrypt-apache
+sudo adduser jarzon
+sudo usermod -aG sudo jarzon
+
+sudo add-apt-repository ppa:ondrej/php
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get -q -y install apache2 php7.4 php7.4-fpm mysql-server libapache2-mod-php php-mysql php-apcu php-curl php-mbstring php7.4-intl composer git fail2ban sendmail logwatch letsencrypt chromium-browser
+
+serverName=${1:-'newserver'}
+
+sudo hostname ${serverName}
+
+sudo cat << EOF > /etc/hostname
+${serverName}
+EOF
+
+sudo nano /etc/hosts
 
 sudo cat << EOF > /etc/apache2/conf-available/custom.conf
 ServerTokens Prod
 ServerSignature Off
+Protocols h2 h2c http/1.1
+<IfModule reqtimeout_module>
+  RequestReadTimeout header=20-40,MinRate=500 body=20,MinRate=500
+</IfModule>
+
 EOF
 
-sudo cat << EOF > /etc/php/7.0/apache2/conf.d/custom.ini
+sudo cat << EOF > /etc/php/7.4/fpm/conf.d/custom.ini
 date.timezone = America/New_York
 sendmail_path = "sendmail -t -i"
 session.gc_maxlifetime = 15552000
 session.cookie_lifetime = 15552000
-realpath_cache_size = 4096k
+upload_max_filesize = 8M
+post_max_size = 8M
+
 EOF
 
 sudo cat << EOF > /usr/share/logwatch/default.conf/custom.conf
-MailTo = j@masterj.net
+MailTo = j@jasonvaillancourt.ca
+
 EOF
 
-# Disable !tty_tickets to be able to reuse sudo session between to ssh access (Comes with so security risk)
+# Disable !tty_tickets to be able to reuse sudo session between to ssh access (Comes with a security risk)
 sudo cat << EOF > /etc/sudoers.d/temp
 Defaults !tty_tickets
+
 EOF
 
 sudo a2enmod rewrite
 sudo a2enmod expires
 sudo a2enmod ssl
+sudo a2enmod proxy_fcgi setenvif
+sudo a2enconf php7.4-fpm
 sudo a2enconf custom
-sudo service apache2 stop
 
-echo "Generate ssl cert"
-
-sudo letsencrypt certonly --standalone -d masterj.net -d www.masterj.net
-sudo service apache2 start
-
-sudo reboot
+sudo service ssh restart
+sudo service apache2 restart
