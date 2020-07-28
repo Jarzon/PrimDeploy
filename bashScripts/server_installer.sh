@@ -51,10 +51,17 @@ Defaults !tty_tickets
 EOF
 
 # IP Failover
-sudo cat << EOF > /etc/systemd/network/50-default.network
-[Network]
-Address=${2}/32
-
+sudo cat << EOF > /etc/netplan/config.yaml
+network:
+     version: 2
+     ethernets:
+         ${2}:
+             dhcp4: true
+             match:
+                 macaddress: ${3}
+             set-name: ${2}
+             addresses:
+             - ${4}/32
 EOF
 
 sudo a2enmod rewrite
@@ -64,6 +71,6 @@ sudo a2enmod proxy_fcgi setenvif
 sudo a2enconf php7.4-fpm
 sudo a2enconf custom
 
+sudo netplan apply
 sudo service ssh restart
 sudo service apache2 restart
-sudo service systemd-networkd restart
