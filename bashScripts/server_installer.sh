@@ -7,7 +7,7 @@ sudo add-apt-repository ppa:ondrej/php
 
 sudo apt-get update
 sudo apt-get upgrade
-sudo apt-get -q -y install apache2 php7.4 php7.4-fpm mysql-server libapache2-mod-php php-mysql php-apcu php-curl php-mbstring php7.4-intl composer git fail2ban sendmail logwatch letsencrypt chromium-browser
+sudo apt-get -q -y install apache2 php8.0 php8.0-fpm mysql-server libapache2-mod-php php8.0-mysql php8.0-apcu php8.0-curl php8.0-mbstring php8.0-intl composer git fail2ban sendmail logwatch letsencrypt chromium-browser
 
 serverName=${1:-'newserver'}
 
@@ -68,7 +68,7 @@ sudo a2enmod rewrite
 sudo a2enmod expires
 sudo a2enmod ssl
 sudo a2enmod proxy_fcgi setenvif
-sudo a2enconf php7.4-fpm
+sudo a2enconf php8.0-fpm
 sudo a2enconf custom
 
 sudo netplan apply

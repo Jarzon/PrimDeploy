@@ -1,4 +1,10 @@
 #!/bin/bash
+if [[ ! -d "./app/deploy" ]]; then
+    printf "!!! Warning !!!\n\n"
+    printf "app/deploy/ config folder not found"
+    exit 1
+fi
+
 source ./app/deploy/config.sh
 
 formatEcho "Create server's base folders"
