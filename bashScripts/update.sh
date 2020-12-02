@@ -6,7 +6,7 @@ deployenvironement=${1:-prod}
 if [ -f "./composer.json" ]; then
     formatEcho "Install dependencies."
 
-    composer --no-dev install -o --no-interaction --no-scripts
+    composer --no-dev install -o --no-interaction --no-scripts --ignore-platform-reqs
 fi
 
 if [ -f "./phinx.yml" ]; then
