@@ -51,17 +51,27 @@ Defaults !tty_tickets
 EOF
 
 # IP Failover
+sudo cat << EOF > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+network: {config: disabled}
+EOF
+sudo cat << EOF > /etc/network/interfaces.d/failover.cfg
+auto ens3:1
+iface ens3:1 inet static
+    address 144.217.32.66
+    netmask 255.255.255.255
+    broadcast 144.217.32.6
+EOF
 sudo cat << EOF > /etc/netplan/config.yaml
 network:
      version: 2
      ethernets:
-         ${2}:
+         ens3:
              dhcp4: true
              match:
-                 macaddress: ${3}
-             set-name: ${2}
+                 macaddress: ${2}
+             set-name: ens3
              addresses:
-             - ${4}/32
+             - ${3}/32
 EOF
 
 sudo a2enmod rewrite
@@ -72,5 +82,6 @@ sudo a2enconf php8.0-fpm
 sudo a2enconf custom
 
 sudo netplan apply
+sudo service networking restart
 sudo service ssh restart
 sudo service apache2 restart
