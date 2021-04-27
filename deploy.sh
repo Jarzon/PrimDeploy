@@ -8,8 +8,9 @@ fi
 
 source ./app/deploy/config.sh
 
-deployenvironement=${1:-prod}
+deployenvironement=${2:-prod}
 deployfolder="htdocs"
+targetServer=${1:-$ssh_server}
 
 if [[ $ssh_user = "root" ]]; then
     formatEcho "Connecting to SSH with root!"
@@ -48,12 +49,12 @@ fi
 
 #ssh $ssh_user@$ssh_server "cd $root_dir/$name && phinx rollback -d $target"
 
-formatEcho "Auth on server: $ssh_server"
+formatEcho "Auth on server: $targetServer"
 
-ssh -t $ssh_user@$ssh_server 'sudo -v'
+ssh -t $ssh_user@$targetServer 'sudo -v'
 
-formatEcho "Sending files to the $deployenvironement server: $ssh_server"
-rsync --compress --times --recursive --verbose --delete --perms --owner --group --copy-links --exclude-from './app/deploy/exclude.txt' -e 'ssh' '--rsync-path=sudo rsync' ./ $ssh_user@$ssh_server:$root_dir/$name/$deployfolder/
+formatEcho "Sending files to the $deployenvironement server: $targetServer"
+rsync --compress --times --recursive --verbose --delete --perms --owner --group --copy-links --exclude-from './app/deploy/exclude.txt' -e 'ssh' '--rsync-path=sudo rsync' ./ $ssh_user@$targetServer:$root_dir/$name/$deployfolder/
 
 if [[ $deployenvironement = 'prod' ]]; then
     formatEcho "Checkout project back to latest branch: $currentBranch"
@@ -65,8 +66,8 @@ if [[ $deployenvironement = 'prod' ]]; then
     fi
 
     formatEcho "Create a backup of the database before the migration."
-    ssh $ssh_user@$ssh_server "cd $root_dir/$name && sudo bash -s" < ../PrimDeploy/bashScripts/backup.sh
+    ssh $ssh_user@$targetServer "cd $root_dir/$name && sudo bash -s" < ../PrimDeploy/bashScripts/backup.sh
 fi
 
 formatEcho "Update the project."
-ssh $ssh_user@$ssh_server "cd $root_dir/$name/$deployfolder && sudo bash -s" < ../PrimDeploy/bashScripts/update.sh $deployenvironement
+ssh $ssh_user@$targetServer "cd $root_dir/$name/$deployfolder && sudo bash -s" < ../PrimDeploy/bashScripts/update.sh $deployenvironement
