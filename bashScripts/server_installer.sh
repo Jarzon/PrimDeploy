@@ -32,8 +32,6 @@ EOF
 sudo cat << EOF > /etc/php/7.4/fpm/conf.d/custom.ini
 date.timezone = America/New_York
 sendmail_path = "sendmail -t -i"
-session.gc_maxlifetime = 15552000
-session.cookie_lifetime = 15552000
 upload_max_filesize = 8M
 post_max_size = 8M
 
@@ -59,7 +57,7 @@ auto ens3:1
 iface ens3:1 inet static
     address 144.217.32.66
     netmask 255.255.255.255
-    broadcast 144.217.32.6
+    broadcast 144.217.32.66
 EOF
 sudo cat << EOF > /etc/netplan/config.yaml
 network:
@@ -71,7 +69,7 @@ network:
                  macaddress: ${2}
              set-name: ens3
              addresses:
-             - ${3}/32
+                 - 144.217.32.66/32
 EOF
 
 sudo a2enmod rewrite
