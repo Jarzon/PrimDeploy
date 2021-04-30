@@ -7,7 +7,9 @@ sudo add-apt-repository ppa:ondrej/php
 
 sudo apt-get update
 sudo apt-get upgrade
-sudo apt-get -q -y install apache2 php8.0 php8.0-fpm mysql-server libapache2-mod-php php8.0-mysql php8.0-apcu php8.0-curl php8.0-mbstring php8.0-intl composer git fail2ban sendmail logwatch letsencrypt chromium-browser
+sudo apt-get -q -y install apache2 php8.0 php8.0-fpm mysql-server libapache2-mod-php php8.0-mysql php8.0-apcu php8.0-curl php8.0-mbstring php8.0-intl composer git fail2ban sendmail logwatch letsencrypt
+sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i google-chrome-stable_current_amd64.deb
 
 serverName=${1:-'newserver'}
 
