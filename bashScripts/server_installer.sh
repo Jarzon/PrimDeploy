@@ -7,7 +7,8 @@ sudo add-apt-repository ppa:ondrej/php
 
 sudo apt-get update
 sudo apt-get upgrade
-sudo apt-get -q -y install apache2 php8.0 php8.0-fpm mysql-server libapache2-mod-php php8.0-mysql php8.0-apcu php8.0-curl php8.0-mbstring php8.0-intl composer git fail2ban sendmail logwatch letsencrypt
+sudo apt-get -q -y install apache2 php8.0 php8.0-fpm mysql-server libapache2-mod-php composer git fail2ban sendmail logwatch letsencrypt
+sudo apt-get -q -y install php8.0-mysql php8.0-apcu php8.0-curl php8.0-mbstring php8.0-intl php8.0-dom php8.0-imagick php8.0-gd php8.0-zip
 sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i google-chrome-stable_current_amd64.deb
 
@@ -31,7 +32,7 @@ Protocols h2 h2c http/1.1
 
 EOF
 
-sudo cat << EOF > /etc/php/7.4/fpm/conf.d/custom.ini
+sudo cat << EOF > /etc/php/8.0/fpm/conf.d/custom.ini
 date.timezone = America/New_York
 sendmail_path = "sendmail -t -i"
 upload_max_filesize = 8M
