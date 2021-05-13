@@ -7,10 +7,15 @@ sudo add-apt-repository ppa:ondrej/php
 
 sudo apt-get update
 sudo apt-get upgrade
-sudo apt-get -q -y install apache2 php8.0 php8.0-fpm mysql-server libapache2-mod-php composer git fail2ban sendmail logwatch letsencrypt
+sudo apt-get -q -y install apache2 php8.0 php8.0-fpm mysql-server libapache2-mod-php git fail2ban sendmail logwatch letsencrypt
 sudo apt-get -q -y install php8.0-mysql php8.0-apcu php8.0-curl php8.0-mbstring php8.0-intl php8.0-dom php8.0-imagick php8.0-gd php8.0-zip
 sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i google-chrome-stable_current_amd64.deb
+
+# Composer
+sudo php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');"
+php /tmp/composer-setup.php  --install-dir=/usr/bin/ --filename=composer
+php -r "unlink('/tmp/composer-setup.php');"
 
 serverName=${1:-'newserver'}
 
